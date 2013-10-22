@@ -12,13 +12,13 @@ function generateMap($mapx, $mapy, $world) {
 
 	$posYStart = ( ( 640 * $mapHeight ) * $mapy ) + ($mapWidth * $mapx);
 
-	for($y=0;$y<$mapHeight;$y++) {
+	for($y = 0; $y < $mapHeight; $y++) {
 		$posY = $posYStart + (640 * $y);
-		for($x = 0;$x < $mapWidth; $x++) {
+		for($x = 0; $x < $mapWidth; $x++) {
 			$posX = $x;
 			$posZ = $posY + $posX;
 		
-			if(strcmp(".",$world[$posZ]) == 0) {
+			if(strcmp(".", $world[$posZ]) == 0) {
 				$map .= "00,";
             } else {
 				$map .= "01,";
