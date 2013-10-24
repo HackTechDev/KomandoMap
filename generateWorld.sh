@@ -2,6 +2,6 @@
 
 ./angKomando.bin > world.raw
 php ./generateMaps.php
-rm world.raw
+mv world.raw maps
 
 firefox displayWorld.html
