@@ -19,20 +19,59 @@ function generateMap($mapx, $mapy, $world) {
 			$posZ = $posY + $posX;
 		
 			if(strcmp(".", $world[$posZ]) == 0) {
-				$map .= "00,";
+				$map .= "00:";
             } else {
-				$map .= "01,";
+				$map .= "01:";
 	    	}
 	    }
     }
 
-    return $map;
+    return substr($map, 0, -1);
 }
 
 function saveMap($mapId, $mapData) {
-	if($fp = fopen("./maps/$mapId.txt", "w+")) {
-		$mapData = substr($mapData, 0, -1); // Remove the final comma
-		fwrite($fp, $mapData);
+
+    // Create background map
+    $mapTmp = "";
+	if($fp = fopen("./maps/$mapId.b.txt", "w+")) {
+        $dataArr = explode(":",  $mapData);
+        $count = 0;
+        foreach ($dataArr as $data) {
+            // Define the background
+            $data = "00";            
+
+            $mapTmp .= $data;
+            if($count == 29) {
+                $mapTmp .= "\n";
+                $count = 0;
+            } else {
+                $mapTmp .= ":";
+                $count++;    
+            }
+        }
+		fwrite($fp, $mapTmp);
+	} else {
+		echo "Failed to save\n";
+    }
+	fclose($fp);
+
+    // Create wall map
+    $mapTmp = "";
+	if($fp = fopen("./maps/$mapId.w.txt", "w+")) {
+        $dataArr = explode(":",  $mapData);
+        $count = 0;
+        foreach ($dataArr as $data) {
+            // Define the background
+            $mapTmp .= $data;
+            if($count == 29) {
+                $mapTmp .= "\n";
+                $count = 0;
+            } else {
+                $mapTmp .= ":";
+                $count++;    
+            }
+        }
+		fwrite($fp, $mapTmp);
 	} else {
 		echo "Failed to save\n";
     }
@@ -48,7 +87,7 @@ function saveMap($mapId, $mapData) {
 //      height : 32 * 15 = 480
 
 function saveMapImage($mapId, $mapData ) {
-	$tiles = explode(",", $mapData);
+	$tiles = explode(":", $mapData);
 
 	$imageTmp = @ImageCreateTrueColor(960, 480); 
     $imageTmpMini = @ImageCreateTrueColor(960 / 10, 480 / 10);
